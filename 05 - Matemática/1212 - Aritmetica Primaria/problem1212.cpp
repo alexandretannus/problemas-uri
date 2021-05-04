@@ -1,45 +1,60 @@
 #include <iostream>
  
 using namespace std;
- 
-int main() {
 
-	int x, y, carry, rx, ry, cont;
+int calcularCarry(unsigned long x, unsigned long y);
+void imprimirResposta(int carry);
+
+int main() {
+	unsigned long x, y;
+	int carry;
 	
 	while (1) {
-		int c[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
-		scanf("%d %d", &x, &y);
-		if (!x && !y) {
+		
+		cin >> x >> y;		
+
+		if (x == 0  && y == 0) {
 			break;
 		}
-		carry = 0;
-		cont = 0;
-		do {
-			rx = x%10;
-			ry = y%10;
-			x = x/10;
-			y = y/10;
-			
-			if (rx + ry + c[cont] > 9) {
-				c[cont+1] = 1;
-				carry++;
-			}
-			
-			cont++;
-			
-		} while (x || y);		
 		
+		carry = calcularCarry(x, y);
 		
-		
-		if (!carry) {
-			printf ("No carry operations.\n");
-		} else if (carry == 1) {
-			printf ("%d carry operation.\n", carry);		
-		} else {
-			printf ("%d carry operations.\n", carry);		
-		}		
+		imprimirResposta(carry);	
 	} 
 
 
     return 0;
+}
+
+int calcularCarry(unsigned long x, unsigned long y) {
+	unsigned long rx, ry;
+	int carry = 0, sumCarry = 0;
+
+	while (x || y) {
+		rx = x%10;
+		ry = y%10;
+		
+		if ((rx + ry + carry) > 9) {
+			sumCarry++;
+			carry = 1;
+		} else {
+			carry = 0;
+		}	
+		
+		x /= 10;
+		y /= 10;
+		
+	} 
+	
+	return sumCarry;
+}
+
+void imprimirResposta(int carry) {		
+	if (carry == 0) {
+		cout << "No carry operations." << endl;
+	} else if (carry == 1) {
+		cout << "1 carry operation." << endl;		
+	} else {
+		cout << carry << " carry operations." << endl;		
+	}
 }
